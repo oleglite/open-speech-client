@@ -1,13 +1,20 @@
 import React from 'react'
-import {Dimensions, Image, StyleSheet} from 'react-native'
+import PropTypes from 'prop-types'
+import {Dimensions, Image, StyleSheet, TouchableHighlight} from 'react-native'
 
 const WIDTH = Dimensions.get('window').width
 
 
-function GirlIcon() {
+function GirlIcon({onPress}) {
     return (
-        <Image source={require('./girl.png')} style={styles.image}/>
+        <TouchableHighlight onPress={onPress}>
+            <Image source={require('./girl.png')} style={styles.image}/>
+        </TouchableHighlight>
     )
+}
+
+GirlIcon.propTypes = {
+    onPress: PropTypes.func.isRequired,
 }
 
 

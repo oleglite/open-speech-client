@@ -2,8 +2,10 @@ import React, {Component} from 'react'
 import {StyleSheet, View} from 'react-native'
 
 import GirlIcon from './GirlIcon'
+import SettingsScreen from './SettingsScreen'
 import Worker from '../worker'
 import {requestPermissions} from '../permissions'
+import {load} from '../settings'
 
 
 export default class App extends Component {
@@ -12,8 +14,10 @@ export default class App extends Component {
         this.state = {
             log: [],
             working: false,
+            showSettings: false,
         }
         this.worker = new Worker()
+        this.loadSettings.bind(this)()
     }
 
     componentDidMount() {
@@ -41,10 +45,32 @@ export default class App extends Component {
         })
     }
 
+    onSettingsClose() {
+        this.setState({showSettings: false})
+        this.loadSettings.bind(this)()
+    }
+
+    loadSettings() {
+        load().then(
+            settings => this.worker.setBackendUri(settings.backendUri)
+        )
+    }
+
     render() {
+        if (this.state.showSettings) {
+            return (
+                <SettingsScreen
+                    visible={this.state.showSettings}
+                    onClose={this.onSettingsClose.bind(this)}
+                />
+            )
+        }
         return (
             <View style={styles.container}>
-                {this.state.working && <GirlIcon/>}
+                {
+                    this.state.working &&
+                    <GirlIcon onPress={() => this.setState({showSettings: true})}/>
+                }
             </View>
         )
     }

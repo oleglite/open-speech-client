@@ -20,6 +20,12 @@ class Worker {
         this.speaker = new Speaker()
 
         this.working = false
+        this.backendUri = ''
+    }
+
+    setBackendUri(uri) {
+        console.log('worker backend uri', uri)
+        this.backendUri = uri
     }
 
     async start() {
@@ -50,12 +56,22 @@ class Worker {
 
     async onRecognized(results) {
         const recognized = results.join(' ')
-        const response = recognized
+        const response = await this.callBackend(recognized)
         this.log.push({
             'user': recognized,
             'bot': response,
         })
         await this.speaker.speak(response)
+    }
+
+    async callBackend(recognized) {
+        if (!this.backendUri) {
+            return 'ох'
+        }
+        const fetchResponse = await fetch(`${this.backendUri}/?speech=${recognized}`)
+        const result = await fetchResponse.json()
+        console.log('call result ', result)
+        return result.response
     }
 }
 
