@@ -1,10 +1,7 @@
 import React, {Component} from 'react'
-import {
-    StyleSheet,
-    Text,
-    View
-} from 'react-native'
+import {StyleSheet, View} from 'react-native'
 
+import GirlIcon from './GirlIcon'
 import Worker from '../worker'
 import {requestPermissions} from '../permissions'
 
@@ -14,6 +11,7 @@ export default class App extends Component {
         super()
         this.state = {
             log: [],
+            working: false,
         }
         this.worker = new Worker()
     }
@@ -21,10 +19,16 @@ export default class App extends Component {
     componentDidMount() {
         requestPermissions()
         this.worker.start()
+            .then(() => {
+                this.setState({working: true})
+            })
     }
 
     componentWillUnmount() {
         this.worker.stop()
+            .then(() => {
+                this.setState({working: false})
+            })
     }
 
     onRecognized(result) {
@@ -40,17 +44,17 @@ export default class App extends Component {
     render() {
         return (
             <View style={styles.container}>
-                {this.state.log.map((result, i) => (
-                    <Text key={i} style={styles.log}>
-                        {result.join(' _ ')}
-                    </Text>
-                ))}
+                {this.state.working && <GirlIcon/>}
             </View>
         )
     }
 }
 
+
 const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+    },
     log: {
         textAlign: 'left',
         color: '#000',

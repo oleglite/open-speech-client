@@ -27,7 +27,7 @@ class Worker {
             return
         }
         this.working = true
-        await this.work()
+        this.work()
     }
 
     stop() {

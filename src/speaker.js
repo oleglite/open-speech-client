@@ -3,13 +3,14 @@ import Tts from 'react-native-tts'
 
 class Speaker {
     constructor() {
-        Tts.voices().then(voices => {
-            voices = voices.filter(v => v.notInstalled === false && v.networkConnectionRequired === false)
-            console.log('Available voices:', voices)
-        })
+        // Tts.voices().then(voices => {
+        //     voices = voices.filter(v => v.notInstalled === false && v.networkConnectionRequired === false)
+        //     console.log('Available voices:', voices)
+        // })
+
         Tts.setDefaultLanguage('ru-RU')
         Tts.setDefaultVoice('ru-ru-x-dfc#female_1-local')
-        Tts.setDefaultPitch(1.5)
+        Tts.setDefaultPitch(1.2)
 
 
 
