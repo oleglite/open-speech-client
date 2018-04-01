@@ -66,10 +66,17 @@ class Worker {
 
     async callBackend(recognized) {
         if (!this.backendUri) {
-            return 'ох'
+            return 'оох'
         }
-        const fetchResponse = await fetch(`${this.backendUri}/?speech=${recognized}`)
-        const result = await fetchResponse.json()
+        let result
+        try {
+            const fetchResponse = await fetch(`${this.backendUri}/?speech=${recognized}`)
+            result = await fetchResponse.json()
+        } catch (e) {
+            console.log('failed to call backend:', e)
+            console.log(e.stack)
+            return 'блин'
+        }
         console.log('call result ', result)
         return result.response
     }
